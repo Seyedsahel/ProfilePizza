@@ -1,4 +1,7 @@
 import requests
+# main.py
+from config import TOKEN
+
 
 
 
@@ -79,7 +82,7 @@ def get_repository_language(repo_name, token):
 
 
 username = "tahamusvi"
-
+token = TOKEN
 repo_languages = get_repo_languages(username,token)
 print(repo_languages)
 
