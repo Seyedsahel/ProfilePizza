@@ -1,8 +1,7 @@
 import requests
 # main.py
-from config import TOKEN
-
-
+from decouple import config
+TOKEN = config('TOKEN')
 
 
 def get_repo_languages(username,token):
