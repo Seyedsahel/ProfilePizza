@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بارگذاری محتوا</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        #content {
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="content">در حال بارگذاری محتوا...</div>
+
+    <script>
+    fetch('http://localhost:8000/text/')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('content').innerText = data;
+      })
+      .catch(error => {
+        document.getElementById('content').innerText = "خطا در بارگذاری محتوا";
+      });
+    </script>
+</body>
+</html>
