@@ -44,8 +44,8 @@ def count_repos_by_language(repo_languages):
 def get_latest_activity(username):
     url = f"https://api.github.com/users/{username}/events"
     headers = {'Authorization': f'token {token}'}
-    # response = requests.get(url, headers=headers)
-    # print(token)
+    response = requests.get(url, headers=headers)
+    print(token)
 
     if response.status_code == 200:
         events = response.json()

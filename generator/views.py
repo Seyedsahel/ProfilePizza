@@ -60,16 +60,19 @@ def svg_generator(request,username):
     print(language_count)
     print(f"--------------------")
 
-    # latest_activity = get_latest_activity(username)
-    # print(latest_activity)
+    latest_activity = get_latest_activity(username)
+    print(latest_activity)
 
-    langu = "django"
+    co_name , working_on = latest_activity['repo_name'].split('/')
 
     texts = [
-        "🎞️ I’m currently working on my Telegram-bot",
-        "⚗️ I’m currently working with Next.Js",
-        f"💿 Ask me about {language_count[0]} and {language_count[1]}",
+        f"🚀 Right now, I'm diving into {latest_activity['repo_lang']}.",
+        f"🔧 I’m currently working on my {working_on} project.",
+        f"📚  Ask me about {language_count[0]} and {language_count[1]}",
     ]
+
+    if co_name != username:
+        texts.append(f"🤝 I recently collaborated with {co_name}.")
 
     # Calculate the height of the background box
     total_height = 20  # Initial padding
