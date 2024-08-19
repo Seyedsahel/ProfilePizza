@@ -1,7 +1,7 @@
 import requests
 # main.py
 from config.settings import TOKEN
-token =TOKEN
+token = TOKEN
 #-------------------------------------------------------------
 def get_repo_languages(username):
     print(token)
@@ -97,27 +97,42 @@ def get_latest_lang(username):
         return f"Error fetching activities: {response.status_code}"
 
 #-------------------------------------------------------------
-def get_contributors( repo):
+def get_contributors(repo):
     url = f"https://api.github.com/repos/{repo}/contributors"
-    contributors = requests.get(url)
-    contributors = contributors.json()
+    response = requests.get(url)
+    if response.status_code == 200:
+        return [{'login': contributor['login']} for contributor in response.json()]
+    else:
+        print(f"Error fetching contributors for {repo}: {response.status_code}")
+        return []
 
-
-def get_user_colab(username):
+def get_user_events(username):
     url = f"https://api.github.com/users/{username}/events"
-    events = requests.get(url)
-    events = events.json()[:10]  # دریافت 10 ایونت آخر
-    
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()[:10] 
+    else:
+        print(f"Error fetching events for {username}: {response.status_code}")
+        return []
 
-    contributors_list = []
+def get_user_contributors(username):
+    events = get_user_events(username)
+    contributors_set = set() 
 
     for event in events:
-        repo= event['repo']['name']
-        
+        repo = event['repo']['name']
         contributors = get_contributors(repo)
-        contributors_list.append({repo: contributors})
+        for contributor in contributors:
+            contributors_set.add(contributor['login'])
 
-    print(contributors_list)
+    contributors_list = list(contributors_set)  
+    
+    
+    username_lower = username.lower()
+    contributors_list = [contributor for contributor in contributors_list if contributor != username_lower]
+
+    return contributors_list  
+
 #-------------------------------------------------------------
 def get_repository_language(repo_name):
     url = f"https://api.github.com/repos/{repo_name}"
@@ -167,6 +182,8 @@ username = "Seyedsahel"
 # print("------------------------------------------")
 print(get_latest_lang(username))
 print("------------------------------------------")
-print(get_user_colab(username))
+
+contributors_list = get_user_contributors(username)
+print(contributors_list)
 
 #-------------------------------------------------------------
