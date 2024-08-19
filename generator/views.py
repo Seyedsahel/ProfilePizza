@@ -2,6 +2,24 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .functions import *
 
+def adieu(names):
+    num_names = len(names)
+    if num_names == 1:
+        return (f"🤝 I recently collaborated with {names[0]}.")
+    elif num_names == 2:
+        return (f"🤝 I recently collaborated with {names[0]} and {names[1]}.")
+    else:
+        output = "🤝 I recently collaborated with "
+        for i in range(num_names):
+            if i == num_names - 1:
+                pass
+            elif i == num_names - 2:
+                output += f"{names[i]}, and {names[i+1]}."
+            else:
+                output += f"{names[i]}, "
+        return (output)
+
+
 def hex_to_rgb(hex_color):
     hex_color = hex_color.lstrip('#')
 
@@ -51,7 +69,6 @@ def svg_generator(request,username):
     line_height = font_size * 1.5  # Space between lines
     max_width = width - 40  # Maximum width for text (considering padding)
     repo_languages = get_repo_languages(username)
-    print("h")
     print(repo_languages)
     print(f"--------------------")
 
@@ -65,14 +82,16 @@ def svg_generator(request,username):
 
     co_name , working_on = latest_activity['repo_name'].split('/')
 
+    co_names = get_user_contributors(username)
+
     texts = [
         f"🚀 Right now, I'm diving into {latest_activity['repo_lang']}.",
         f"🔧 I’m currently working on my {working_on} project.",
         f"📚  Ask me about {language_count[0]} and {language_count[1]}",
+        f"{adieu(co_names)}",
     ]
 
-    if co_name != username:
-        texts.append(f"🤝 I recently collaborated with {co_name}.")
+    
 
     # Calculate the height of the background box
     total_height = 20  # Initial padding

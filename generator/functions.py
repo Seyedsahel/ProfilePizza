@@ -9,8 +9,7 @@ def get_repo_languages(username):
     headers = {'Authorization': f'token {token}'}
     
     response = requests.get(repos_url,headers = headers, timeout=1000)
-    print("d")
-    
+
     if response.status_code == 200:
         repos = response.json()
         
@@ -129,8 +128,9 @@ def get_user_contributors(username):
     
     
     username_lower = username.lower()
+    print(username_lower)
     contributors_list = [contributor for contributor in contributors_list if contributor != username_lower]
-
+    print(contributors_list)
     return contributors_list  
 
 #-------------------------------------------------------------
