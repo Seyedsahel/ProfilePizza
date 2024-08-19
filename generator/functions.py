@@ -68,6 +68,37 @@ def get_latest_activity(username):
     else:
         return f"Error fetching activities: {response.status_code}"
 #-------------------------------------------------------------
+def get_latest_lang(username):
+    url = f"https://api.github.com/users/{username}/events"
+    headers = {'Authorization': f'token {token}'}
+    response = requests.get(url, headers=headers)
+    print(token)
+
+    if response.status_code == 200:
+        events = response.json()
+        filtered_events = []
+
+        for event in events:
+            event_type = event['type']
+            if event_type in ['PushEvent', 'CreateEvent', 'PullRequestEvent']:
+                filtered_events.append(event)
+
+        if filtered_events:
+            
+            languages = [get_repository_language(event['repo']['name']) for event in filtered_events[:10]]
+
+            unique_languages = set(lang for lang in languages if lang is not None)
+
+            non_identical_languages = [lang for lang in unique_languages if languages.count(lang) == 1]
+
+            return non_identical_languages
+
+        else:
+            return "No relevant activities found for this user."
+    else:
+        return f"Error fetching activities: {response.status_code}"
+
+#-------------------------------------------------------------
 def get_repository_language(repo_name):
     url = f"https://api.github.com/repos/{repo_name}"
     headers = {'Authorization': f'token {token}'}
@@ -76,7 +107,9 @@ def get_repository_language(repo_name):
     if response.status_code == 200:
         repo_info = response.json()
         language = repo_info.get('language', 'No language specified')
-        return language
+
+        if language is not None:
+            return language
     else:
         return f"Error fetching repository info: {response.status_code}"
 #-------------------------------------------------------------
@@ -102,14 +135,15 @@ def generate_markdown(repo_languages, language_count, latest_activity):
 
     return markdown
 #-------------------------------------------------------------
-# username = "omidTarabavar"
-# token = TOKEN
-# repo_languages = get_repo_languages(username,token)
+username = "Reza-B"
+# repo_languages = get_repo_languages(username)
 # print(repo_languages)
 
 # language_count = count_repos_by_language(repo_languages)
 # print(language_count)
 
-# latest_activity = get_latest_activity(username, token)
+# latest_activity = get_latest_activity(username)
 # print(latest_activity)
+# print("------------------------------------------")
+print(get_3_latest(username))
 #-------------------------------------------------------------
