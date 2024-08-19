@@ -68,27 +68,40 @@ def svg_generator(request,username):
 
     line_height = font_size * 1.5  # Space between lines
     max_width = width - 40  # Maximum width for text (considering padding)
-    repo_languages = get_repo_languages(username)
-    print(repo_languages)
-    print(f"--------------------")
 
+    #----------------------------------------
+    # section offline
+    repo_languages = {'Captcha-breaker': 'Python', 'Data-Structure-Coursera': 'C#', 'Emergency-pm': 'CSS', 'friendZone': 'Jupyter Notebook', 'images': 'Jupyter Notebook', 'MalwareDetector': 'Python', 'Petro-Lithology-Prediction': 'Jupyter Notebook', 'quera-solutions': 'Python', 'Stratego': 'Java', 'Sudoku_cpp': 'C++', 'Toos': 'Python', 'webShop': 'Python', 'Web_Security_tools': 'Python', 'words': 'Python', 'xv6-public': 'C'}
 
     language_count = list(count_repos_by_language(repo_languages))
-    print(language_count)
-    print(f"--------------------")
 
-    latest_activity = get_latest_activity(username)
-    print(latest_activity)
+
+    latest_activity = {'type': 'PushEvent', 'repo_name': 'Seyedsahel/ProfilePizza',
+      'repo_url': 'https://api.github.com/repos/Seyedsahel/ProfilePizza', 'repo_lang': 'Python'}
+    #----------------------------------------
+    # repo_languages = get_repo_languages(username)
+    # print(repo_languages)
+    # print(f"--------------------")
+
+
+    # language_count = list(count_repos_by_language(repo_languages))
+    # print(language_count)
+    # print(f"--------------------")
+
+    # latest_activity = get_latest_activity(username)
+    # print(latest_activity)
+    #----------------------------------------
 
     co_name , working_on = latest_activity['repo_name'].split('/')
+    working_on_with_link = f'<a href="https://github.com/{latest_activity["repo_name"]}">{working_on}</a>'
 
-    co_names = get_user_contributors(username)
+    # co_names = get_user_contributors(username)
 
     texts = [
         f"🚀 Right now, I'm diving into {latest_activity['repo_lang']}.",
-        f"🔧 I’m currently working on my {working_on} project.",
+        f'🔧 I’m currently working on my {working_on} project.',
         f"📚  Ask me about {language_count[0]} and {language_count[1]}",
-        f"{adieu(co_names)}",
+        # f"{adieu(co_names)}",
     ]
 
     
@@ -122,4 +135,8 @@ def svg_generator(request,username):
         svg_content += f'<text x="20" y="{margin + line_height * i}" class="text">{line}</text>\n'
 
     svg_content += '</svg>'
+
+    svg_content = svg_content.replace(working_on,working_on_with_link)
+
+    # print(svg_content)
     return HttpResponse(svg_content, content_type='image/svg+xml')

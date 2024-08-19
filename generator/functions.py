@@ -104,7 +104,7 @@ def get_contributors(repo):
     else:
         print(f"Error fetching contributors for {repo}: {response.status_code}")
         return []
-
+#-------------------------------------------------------------
 def get_user_events(username):
     url = f"https://api.github.com/users/{username}/events"
     response = requests.get(url)
@@ -113,7 +113,7 @@ def get_user_events(username):
     else:
         print(f"Error fetching events for {username}: {response.status_code}")
         return []
-
+#-------------------------------------------------------------
 def get_user_contributors(username):
     events = get_user_events(username)
     contributors_set = set() 
@@ -148,28 +148,6 @@ def get_repository_language(repo_name):
     else:
         return f"Error fetching repository info: {response.status_code}"
 #-------------------------------------------------------------
-def generate_markdown(repo_languages, language_count, latest_activity):
-    markdown = "# My GitHub Stats\n\n"
-    
-    markdown += "## Repository Languages\n"
-    for repo, language in repo_languages.items():
-        markdown += f"- **{repo}**: {language}\n"
-    
-    markdown += "\n## Language Count\n"
-    for language, count in language_count.items():
-        markdown += f"- **{language}**: {count} repositories\n"
-    
-    markdown += "\n## Latest Activity\n"
-
-    if isinstance(latest_activity, dict):
-            markdown += f"- **Type**: {latest_activity['type']}\n"
-            markdown += f"- **Repository**: [{latest_activity['repo_name']}]({latest_activity['repo_url']})\n"
-            markdown += f"- **Language**: {latest_activity['repo_lang']}\n"
-    else:
-        markdown += latest_activity
-
-    return markdown
-#-------------------------------------------------------------
 username = "Seyedsahel"
 # repo_languages = get_repo_languages(username)
 # print(repo_languages)
@@ -180,10 +158,10 @@ username = "Seyedsahel"
 # latest_activity = get_latest_activity(username)
 # print(latest_activity)
 # print("------------------------------------------")
-print(get_latest_lang(username))
-print("------------------------------------------")
+# print(get_latest_lang(username))
+# print("------------------------------------------")
 
-contributors_list = get_user_contributors(username)
-print(contributors_list)
+# contributors_list = get_user_contributors(username)
+# print(contributors_list)
 
 #-------------------------------------------------------------
