@@ -1,7 +1,7 @@
 import requests
 # main.py
 from config.settings import TOKEN
-token = TOKEN
+token =TOKEN
 #-------------------------------------------------------------
 def get_repo_languages(username):
     print(token)
@@ -85,19 +85,39 @@ def get_latest_lang(username):
 
         if filtered_events:
             
-            languages = [get_repository_language(event['repo']['name']) for event in filtered_events[:10]]
+            lang_1 , lang_2 , lang_3 = get_repository_language(filtered_events[0]['repo']['name'] ) , get_repository_language(filtered_events[1]['repo']['name']) , get_repository_language(filtered_events[2]['repo']['name'])
+            unique_languages = set(lang for lang in [lang_1, lang_2, lang_3] if lang is not None)
+            non_identical_languages = [lang for lang in unique_languages if list(unique_languages).count(lang) == 1]
 
-            unique_languages = set(lang for lang in languages if lang is not None)
-
-            non_identical_languages = [lang for lang in unique_languages if languages.count(lang) == 1]
-
-            return non_identical_languages
+            return non_identical_languages 
 
         else:
             return "No relevant activities found for this user."
     else:
         return f"Error fetching activities: {response.status_code}"
 
+#-------------------------------------------------------------
+def get_contributors( repo):
+    url = f"https://api.github.com/repos/{repo}/contributors"
+    contributors = requests.get(url)
+    contributors = contributors.json()
+
+
+def get_user_colab(username):
+    url = f"https://api.github.com/users/{username}/events"
+    events = requests.get(url)
+    events = events.json()[:10]  # دریافت 10 ایونت آخر
+    
+
+    contributors_list = []
+
+    for event in events:
+        repo= event['repo']['name']
+        
+        contributors = get_contributors(repo)
+        contributors_list.append({repo: contributors})
+
+    print(contributors_list)
 #-------------------------------------------------------------
 def get_repository_language(repo_name):
     url = f"https://api.github.com/repos/{repo_name}"
@@ -135,7 +155,7 @@ def generate_markdown(repo_languages, language_count, latest_activity):
 
     return markdown
 #-------------------------------------------------------------
-username = "Reza-B"
+username = "Seyedsahel"
 # repo_languages = get_repo_languages(username)
 # print(repo_languages)
 
@@ -145,5 +165,8 @@ username = "Reza-B"
 # latest_activity = get_latest_activity(username)
 # print(latest_activity)
 # print("------------------------------------------")
-print(get_3_latest(username))
+print(get_latest_lang(username))
+print("------------------------------------------")
+print(get_user_colab(username))
+
 #-------------------------------------------------------------
