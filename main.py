@@ -2,6 +2,13 @@ import requests
 # main.py
 from config.settings import TOKEN
 token = TOKEN
+
+#-------------------------------------------------------------
+username = "tahamusvi"
+url = f"https://api.github.com/users/{username}/events"
+headers = {'Authorization': f'token {token}'}
+response_events = requests.get(url, headers=headers)
+
 #-------------------------------------------------------------
 def adieu(names):
     num_names = len(names)
@@ -92,13 +99,11 @@ def count_repos_by_language(repo_languages):
     return language_count
 #-------------------------------------------------------------
 def get_latest_activity(username):
-    url = f"https://api.github.com/users/{username}/events"
-    headers = {'Authorization': f'token {token}'}
-    response = requests.get(url, headers=headers)
+   
     print(token)
 
-    if response.status_code == 200:
-        events = response.json()
+    if response_events.status_code == 200:
+        events = response_events.json()
         filtered_events = []
 
         for event in events:
@@ -116,16 +121,16 @@ def get_latest_activity(username):
         else:
             return "No relevant activities found for this user."
     else:
-        return f"Error fetching activities: {response.status_code}"
+        return f"Error fetching activities: {response_events.status_code}"
 #-------------------------------------------------------------
 def get_latest_lang(username):
-    url = f"https://api.github.com/users/{username}/events"
-    headers = {'Authorization': f'token {token}'}
-    response = requests.get(url, headers=headers)
-    print(token)
+    # url = f"https://api.github.com/users/{username}/events"
+    # headers = {'Authorization': f'token {token}'}
+    # response = requests.get(url, headers=headers)
+    # print(token)
 
-    if response.status_code == 200:
-        events = response.json()
+    if response_events.status_code == 200:
+        events = response_events.json()
         filtered_events = []
 
         for event in events:
@@ -144,7 +149,7 @@ def get_latest_lang(username):
         else:
             return "No relevant activities found for this user."
     else:
-        return f"Error fetching activities: {response.status_code}"
+        return f"Error fetching activities: {response_events.status_code}"
 
 #-------------------------------------------------------------
 def get_contributors(repo):
@@ -157,12 +162,10 @@ def get_contributors(repo):
         return []
 #-------------------------------------------------------------
 def get_user_events(username):
-    url = f"https://api.github.com/users/{username}/events"
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.json()[:10] 
+    if response_events.status_code == 200:
+        return response_events.json()[:10] 
     else:
-        print(f"Error fetching events for {username}: {response.status_code}")
+        print(f"Error fetching events for {username}: {response_events.status_code}")
         return []
 #-------------------------------------------------------------
 def get_user_contributors(username):
@@ -179,9 +182,8 @@ def get_user_contributors(username):
     
     
     username_lower = username.lower()
-    print(username_lower)
-    contributors_list = [contributor for contributor in contributors_list if contributor != username_lower]
-    print(contributors_list)
+    
+    contributors_list = [contributor for contributor in contributors_list if contributor.lower() != username_lower]
     return contributors_list  
 
 #-------------------------------------------------------------
@@ -199,7 +201,7 @@ def get_repository_language(repo_name):
     else:
         return f"Error fetching repository info: {response.status_code}"
 #-------------------------------------------------------------
-username = "Seyedsahel"
+
 # repo_languages = get_repo_languages(username)
 # print(repo_languages)
 
@@ -212,7 +214,7 @@ username = "Seyedsahel"
 # print(get_latest_lang(username))
 # print("------------------------------------------")
 
-# contributors_list = get_user_contributors(username)
-# print(contributors_list)
+contributors_list = get_user_contributors(username)
+print(contributors_list)
 
 #-------------------------------------------------------------
