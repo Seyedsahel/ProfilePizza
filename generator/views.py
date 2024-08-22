@@ -78,6 +78,11 @@ def svg_generator(request,username):
 
     latest_activity = {'type': 'PushEvent', 'repo_name': 'Seyedsahel/ProfilePizza',
       'repo_url': 'https://api.github.com/repos/Seyedsahel/ProfilePizza', 'repo_lang': 'Python'}
+    
+    co_names = ['Sahel',
+        'Reza',
+        'Omid',
+        ]
     #----------------------------------------
     # repo_languages = get_repo_languages(username)
     # print(repo_languages)
@@ -101,7 +106,7 @@ def svg_generator(request,username):
         f"🚀 Right now, I'm diving into {latest_activity['repo_lang']}.",
         f'🔧 I’m currently working on my {working_on} project.',
         f"📚  Ask me about {language_count[0]} and {language_count[1]}",
-        # f"{adieu(co_names)}",
+        f"{adieu(co_names)}",
     ]
 
     
@@ -137,6 +142,9 @@ def svg_generator(request,username):
     svg_content += '</svg>'
 
     svg_content = svg_content.replace(working_on,working_on_with_link)
+    for x in co_names:
+        
+        svg_content = svg_content.replace(x,f'<a href="https://github.com/{x}">{x}</a>')
 
     # print(svg_content)
     return HttpResponse(svg_content, content_type='image/svg+xml')
