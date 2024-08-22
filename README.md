@@ -29,45 +29,45 @@ To generate an SVG image, make a GET request to the `svg_generator` view with th
 #### 1. Default Request
 
 ```http
-GET https://piza.liara.run/tahamusvi/
+GET https://profile-pizza.liara.run/generate/tahamusvi/
 ```
-![Default Project Stats](https://piza.liara.run/tahamusvi/)
+![Default Project Stats](https://profile-pizza.liara.run/generate/tahamusvi/)
 
 
 #### 2. Background Color
 
 ```http
-GET https://piza.liara.run/tahamusvi/?bgcolor=000
+GET https://profile-pizza.liara.run/generate/tahamusvi/?bgcolor=000
 ```
-![Black Background Project Stats](https://piza.liara.run/tahamusvi/?bgcolor=000)
+![Black Background Project Stats](https://profile-pizza.liara.run/generate/tahamusvi/?bgcolor=000)
 
 #### 3. Text Color
 
 ```http
-GET https://piza.liara.run/tahamusvi/?textcolor=646464
+GET https://profile-pizza.liara.run/generate/tahamusvi/?textcolor=646464
 ```
-![Red Text Project Stats](https://piza.liara.run/tahamusvi/?textcolor=646464)
+![Red Text Project Stats](https://profile-pizza.liara.run/generate/tahamusvi/?textcolor=646464)
 
 #### 4. No Background
 
 ```http
-GET https://piza.liara.run/tahamusvi/?no_bg=true
+GET https://profile-pizza.liara.run/generate/tahamusvi/?no_bg=true
 ```
-![No Background Project Stats](https://piza.liara.run/tahamusvi/?no_bg=true)
+![No Background Project Stats](https://profile-pizza.liara.run/generate/tahamusvi/?no_bg=true)
 
 #### 5. Custom Width and Height
 
 ```http
-GET https://piza.liara.run/tahamusvi/?width=800&height=600
+GET https://profile-pizza.liara.run/generate/tahamusvi/?width=800&height=600
 ```
-![Custom Size Project Stats](https://piza.liara.run/tahamusvi/?width=800&height=600)
+![Custom Size Project Stats](https://profile-pizza.liara.run/generate/tahamusvi/?width=800&height=600)
 
 #### 6. Custom Font Size
 
 ```http
-GET https://piza.liara.run/tahamusvi/?font_size=30
+GET https://profile-pizza.liara.run/generate/tahamusvi/?font_size=30
 ```
-![Larger Font Size Project Stats](https://piza.liara.run/tahamusvi/?font_size=30)
+![Larger Font Size Project Stats](https://profile-pizza.liara.run/generate/tahamusvi/?font_size=30)
 
 
 ## Support
