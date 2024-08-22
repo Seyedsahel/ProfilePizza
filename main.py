@@ -3,6 +3,57 @@ import requests
 from config.settings import TOKEN
 token = TOKEN
 #-------------------------------------------------------------
+def adieu(names):
+    num_names = len(names)
+    if num_names == 1:
+        return (f"🤝 I recently collaborated with {names[0]}.")
+    elif num_names == 2:
+        return (f"🤝 I recently collaborated with {names[0]} and {names[1]}.")
+    else:
+        output = "🤝 I recently collaborated with "
+        for i in range(num_names):
+            if i == num_names - 1:
+                pass
+            elif i == num_names - 2:
+                output += f"{names[i]}, and {names[i+1]}."
+            else:
+                output += f"{names[i]}, "
+        return (output)
+#-------------------------------------------------------------
+def hex_to_rgb(hex_color):
+    hex_color = hex_color.lstrip('#')
+
+    if len(hex_color) == 3:
+        hex_color = ''.join([c * 2 for c in hex_color])
+    return tuple(int(hex_color[i:i + 2], 16) for i in (0, 2, 4))
+#-------------------------------------------------------------
+def rgb_to_hex(rgb):
+    return '{:02x}{:02x}{:02x}'.format(*rgb)
+#-------------------------------------------------------------
+def get_complementary_color(hex_color):
+    rgb = hex_to_rgb(hex_color)
+    comp_rgb = (255 - rgb[0], 255 - rgb[1], 255 - rgb[2])
+    return rgb_to_hex(comp_rgb)
+#-------------------------------------------------------------
+def wrap_text(text, max_width, font_size):
+    words = text.split(' ')
+    lines = []
+    current_line = ''
+
+    for word in words:
+        # Check if adding the next word exceeds the max width
+        test_line = f"{current_line} {word}".strip()
+        if len(test_line) * font_size / 2 > max_width:  # Approximate width calculation
+            lines.append(current_line)
+            current_line = word  # Start a new line
+        else:
+            current_line = test_line
+
+    if current_line:  # Add the last line
+        lines.append(current_line)
+
+    return lines
+#-------------------------------------------------------------
 def get_repo_languages(username):
     print(token)
     repos_url = f"https://api.github.com/users/{username}/repos"
