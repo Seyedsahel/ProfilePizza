@@ -2,12 +2,18 @@ import requests
 # main.py
 from config.settings import TOKEN
 token = TOKEN
-
 #-------------------------------------------------------------
-username = "tahamusvi"
-url = f"https://api.github.com/users/{username}/events"
-headers = {'Authorization': f'token {token}'}
-response_events = requests.get(url, headers=headers)
+
+def get_user_events(username):
+    url = f"https://api.github.com/users/{username}/events"
+    headers = {'Authorization': f'token {token}'}
+    response_events = requests.get(url, headers=headers)
+
+    if response_events.status_code == 200:
+        return response_events.json()
+    else:
+        print(f"Error fetching events for {username}: {response_events.status_code}")
+        return []
 
 #-------------------------------------------------------------
 def adieu(names):
@@ -98,10 +104,8 @@ def count_repos_by_language(repo_languages):
             
     return language_count
 #-------------------------------------------------------------
-def get_latest_activity(username):
+def get_latest_activity(response_events):
    
-    print(token)
-
     if response_events.status_code == 200:
         events = response_events.json()
         filtered_events = []
@@ -123,12 +127,7 @@ def get_latest_activity(username):
     else:
         return f"Error fetching activities: {response_events.status_code}"
 #-------------------------------------------------------------
-def get_latest_lang(username):
-    # url = f"https://api.github.com/users/{username}/events"
-    # headers = {'Authorization': f'token {token}'}
-    # response = requests.get(url, headers=headers)
-    # print(token)
-
+def get_latest_lang(response_events):
     if response_events.status_code == 200:
         events = response_events.json()
         filtered_events = []
@@ -161,15 +160,8 @@ def get_contributors(repo):
         print(f"Error fetching contributors for {repo}: {response.status_code}")
         return []
 #-------------------------------------------------------------
-def get_user_events(username):
-    if response_events.status_code == 200:
-        return response_events.json()[:10] 
-    else:
-        print(f"Error fetching events for {username}: {response_events.status_code}")
-        return []
-#-------------------------------------------------------------
-def get_user_contributors(username):
-    events = get_user_events(username)
+def get_user_contributors(username,response_events):
+    events = response_events[:10] 
     contributors_set = set() 
 
     for event in events:
@@ -179,8 +171,6 @@ def get_user_contributors(username):
             contributors_set.add(contributor['login'])
 
     contributors_list = list(contributors_set)  
-    
-    
     username_lower = username.lower()
     
     contributors_list = [contributor for contributor in contributors_list if contributor.lower() != username_lower]
@@ -201,6 +191,8 @@ def get_repository_language(repo_name):
     else:
         return f"Error fetching repository info: {response.status_code}"
 #-------------------------------------------------------------
+username = "tahamusvi"
+response_events = get_user_events(username)
 
 # repo_languages = get_repo_languages(username)
 # print(repo_languages)
@@ -208,13 +200,12 @@ def get_repository_language(repo_name):
 # language_count = count_repos_by_language(repo_languages)
 # print(language_count)
 
-# latest_activity = get_latest_activity(username)
+# latest_activity = get_latest_activity(response_events)
 # print(latest_activity)
 # print("------------------------------------------")
-# print(get_latest_lang(username))
+# print(get_latest_lang(response_events))
 # print("------------------------------------------")
 
-contributors_list = get_user_contributors(username)
+contributors_list = get_user_contributors(username,response_events)
 print(contributors_list)
-
 #-------------------------------------------------------------
