@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .functions import *
+from .models import Record
 
 def adieu(names):
     num_names = len(names)
@@ -55,6 +56,17 @@ def wrap_text(text, max_width, font_size):
     return lines
 
 def svg_generator(request,username):
+    try:
+        record = Record.objects.get(username=username)
+        record.inc_count()
+
+    except Record.DoesNotExist:
+        record = Record(username=username)
+
+    record.save()
+
+
+    #----------------------------------------
     bgcolor = request.GET.get('bgcolor', 'f4f4f4')
     text_color = request.GET.get('textcolor', get_complementary_color(bgcolor))
     no_bg = request.GET.get('no_bg', 'false').lower() == 'true'
