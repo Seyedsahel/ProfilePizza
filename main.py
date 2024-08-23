@@ -196,23 +196,30 @@ def get_user_satr(response_events):
     return last_star[0]['repo']['name']
  
 #-------------------------------------------------------------
-username = "tahamusvi"
-response_events = get_user_events(username)
+def main():
+        
+    username = "tahamusvi"
+    response_events = get_user_events(username)
 
-# repo_languages = get_repo_languages(username)
-# print(repo_languages)
+    # repo_languages = get_repo_languages(username)
+    # print(repo_languages)
 
-print(get_user_satr(response_events))
+    # print(get_user_satr(response_events))
 
-# language_count = count_repos_by_language(repo_languages)
-# print(language_count)
+    # language_count = count_repos_by_language(repo_languages)
+    # print(language_count)
 
-# latest_activity = get_latest_activity(response_events)
-# print(latest_activity)
-# print("------------------------------------------")
-# print(get_latest_lang(response_events))
-# print("------------------------------------------")
+    # latest_activity = get_latest_activity(response_events)
+    # print(latest_activity)
+    # print("------------------------------------------")
+    # print(get_latest_lang(response_events))
+    # print("------------------------------------------")
 
-# contributors_list = get_user_contributors(username,response_events)
-# print(contributors_list)
+    # contributors_list = get_user_contributors(username,response_events)
+    # print(contributors_list)
+
 # -------------------------------------------------------------
+
+
+if __name__ == "__main__":
+    main()
