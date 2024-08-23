@@ -16,6 +16,16 @@ def get_user_events(username):
         return []
 
 #-------------------------------------------------------------
+def get_filtered_events(events,filters):
+    filtered_events = []
+
+    for event in events:
+        event_type = event['type']
+        if event_type in filters:
+            filtered_events.append(event)
+    return filtered_events
+
+#-------------------------------------------------------------
 def adieu(names):
     num_names = len(names)
     if num_names == 1:
@@ -81,6 +91,9 @@ def get_repo_languages(username):
         
         for repo in repos:
             repo_name = repo['name']
+            print(repo_name)
+            if repo_name == f"{username}" :
+                continue
             language = repo.get('language', 'No language specified')
             if language == None :
                 continue
@@ -105,50 +118,33 @@ def count_repos_by_language(repo_languages):
     return language_count
 #-------------------------------------------------------------
 def get_latest_activity(response_events):
-   
-    if response_events.status_code == 200:
-        events = response_events.json()
-        filtered_events = []
 
-        for event in events:
-            event_type = event['type']
-            if event_type in ['PushEvent', 'CreateEvent', 'PullRequestEvent']:
-                filtered_events.append(event)
+    filtered_events = get_filtered_events(response_events,['PushEvent', 'CreateEvent', 'PullRequestEvent'])
 
-        if filtered_events:
-            latest_event={}
-            latest_event['type'] = filtered_events[0]['type'] 
-            latest_event['repo_name'] = filtered_events[0]['repo']['name'] 
-            latest_event['repo_url'] = filtered_events[0]['repo']['url'] 
-            latest_event['repo_lang'] = get_repository_language(latest_event['repo_name'])
-            return latest_event
-        else:
-            return "No relevant activities found for this user."
+    if filtered_events:
+        latest_event={}
+        latest_event['type'] = filtered_events[0]['type'] 
+        latest_event['repo_name'] = filtered_events[0]['repo']['name'] 
+        latest_event['repo_url'] = filtered_events[0]['repo']['url'] 
+        latest_event['repo_lang'] = get_repository_language(latest_event['repo_name'])
+        return latest_event
     else:
-        return f"Error fetching activities: {response_events.status_code}"
+        return "No relevant activities found for this user."
+    
 #-------------------------------------------------------------
 def get_latest_lang(response_events):
-    if response_events.status_code == 200:
-        events = response_events.json()
-        filtered_events = []
+    filtered_events = get_filtered_events(response_events,['PushEvent', 'CreateEvent', 'PullRequestEvent'])
 
-        for event in events:
-            event_type = event['type']
-            if event_type in ['PushEvent', 'CreateEvent', 'PullRequestEvent']:
-                filtered_events.append(event)
+    if filtered_events:
+        
+        lang_1 , lang_2 , lang_3 = get_repository_language(filtered_events[0]['repo']['name'] ) , get_repository_language(filtered_events[1]['repo']['name']) , get_repository_language(filtered_events[2]['repo']['name'])
+        unique_languages = set(lang for lang in [lang_1, lang_2, lang_3] if lang is not None)
+        non_identical_languages = [lang for lang in unique_languages if list(unique_languages).count(lang) == 1]
 
-        if filtered_events:
-            
-            lang_1 , lang_2 , lang_3 = get_repository_language(filtered_events[0]['repo']['name'] ) , get_repository_language(filtered_events[1]['repo']['name']) , get_repository_language(filtered_events[2]['repo']['name'])
-            unique_languages = set(lang for lang in [lang_1, lang_2, lang_3] if lang is not None)
-            non_identical_languages = [lang for lang in unique_languages if list(unique_languages).count(lang) == 1]
+        return non_identical_languages 
 
-            return non_identical_languages 
-
-        else:
-            return "No relevant activities found for this user."
     else:
-        return f"Error fetching activities: {response_events.status_code}"
+        return "No relevant activities found for this user."
 
 #-------------------------------------------------------------
 def get_contributors(repo):
@@ -161,12 +157,16 @@ def get_contributors(repo):
         return []
 #-------------------------------------------------------------
 def get_user_contributors(username,response_events):
-    events = response_events[:10] 
+    events = response_events[:10]
+    events = get_filtered_events(events,['PushEvent', 'CreateEvent', 'PullRequestEvent'])
+
     contributors_set = set() 
 
     for event in events:
         repo = event['repo']['name']
-        contributors = get_contributors(repo)
+        if repo != f"{username}/{username}":
+            contributors = get_contributors(repo)
+
         for contributor in contributors:
             contributors_set.add(contributor['login'])
 
@@ -194,8 +194,8 @@ def get_repository_language(repo_name):
 username = "tahamusvi"
 response_events = get_user_events(username)
 
-# repo_languages = get_repo_languages(username)
-# print(repo_languages)
+repo_languages = get_repo_languages(username)
+print(repo_languages)
 
 # language_count = count_repos_by_language(repo_languages)
 # print(language_count)
@@ -206,6 +206,6 @@ response_events = get_user_events(username)
 # print(get_latest_lang(response_events))
 # print("------------------------------------------")
 
-contributors_list = get_user_contributors(username,response_events)
-print(contributors_list)
+# contributors_list = get_user_contributors(username,response_events)
+# print(contributors_list)
 #-------------------------------------------------------------
