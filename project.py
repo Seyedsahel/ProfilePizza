@@ -116,19 +116,22 @@ def count_repos_by_language(repo_languages):
             
     return language_count
 #-------------------------------------------------------------
-def get_latest_activity(response_events):
-
-    filtered_events = get_filtered_events(response_events,['PushEvent', 'CreateEvent', 'PullRequestEvent'])
+def get_latest_activity(response_events, username):
+    filtered_events = get_filtered_events(response_events, ['PushEvent', 'CreateEvent', 'PullRequestEvent'])
 
     if filtered_events:
-        latest_event={}
-        latest_event['type'] = filtered_events[0]['type'] 
-        latest_event['repo_name'] = filtered_events[0]['repo']['name'] 
-        latest_event['repo_url'] = filtered_events[0]['repo']['url'] 
-        latest_event['repo_lang'] = get_repository_language(latest_event['repo_name'])
-        return latest_event
-    else:
-        return "No relevant activities found for this user."
+        for event in filtered_events:
+            repo_name = event['repo']['name']
+            if repo_name != username:
+                latest_event = {}
+                latest_event['type'] = event['type']
+                latest_event['repo_name'] = repo_name
+                latest_event['repo_url'] = event['repo']['url']
+                latest_event['repo_lang'] = get_repository_language(repo_name)
+                return latest_event
+
+    return "No relevant activities found for this user."
+
     
 #-------------------------------------------------------------
 def get_latest_lang(response_events):
@@ -197,7 +200,7 @@ def get_user_satr(response_events):
 #-------------------------------------------------------------
 def main():
         
-    username = "tahamusvi"
+    username = "seyedsahel"
     # response_events = get_user_events(username)
 
     # repo_languages = get_repo_languages(username)
@@ -208,7 +211,7 @@ def main():
     # language_count = count_repos_by_language(repo_languages)
     # print(language_count)
 
-    # latest_activity = get_latest_activity(response_events)
+    # latest_activity = get_latest_activity(response_events,username)
     # print(latest_activity)
     # print("------------------------------------------")
     # print(get_latest_lang(response_events))
