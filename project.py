@@ -199,7 +199,7 @@ def get_user_satr(response_events):
 def main():
         
     username = "tahamusvi"
-    response_events = get_user_events(username)
+    # response_events = get_user_events(username)
 
     # repo_languages = get_repo_languages(username)
     # print(repo_languages)
