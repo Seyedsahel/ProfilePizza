@@ -1,12 +1,12 @@
-# ProfilePizza
+# 🍕 ProfilePizza
+### Video Demo: https://youtu.be/-hSNSo1GtlI?si=t8vLklaYvIdLBtvL
 
-🍕 **ProfilePizza**: A fun and creative tool for generating dynamic profiles on GitHub!
-
-**About the Project:**
+### Description:
+A fun and creative tool for generating dynamic profiles on GitHub!
 ProfilePizza helps you fill your GitHub profile with dynamic and engaging text. This program automatically generates a personalized and amusing text based on your recent commits and projects. Say goodbye to repetitive profile writing and easily showcase your skills and experiences!
 
 
-**Why ProfilePizza?**
+### Why ProfilePizza?
 Because every coder has their own story, and we want to serve it up in a deliciously engaging way!
 
 ---
