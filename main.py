@@ -161,7 +161,7 @@ def get_user_contributors(username,response_events):
     events = get_filtered_events(events,['PushEvent', 'CreateEvent', 'PullRequestEvent'])
 
     contributors_set = set() 
-
+    contributors = []
     for event in events:
         repo = event['repo']['name']
         if repo != f"{username}/{username}":
@@ -191,11 +191,18 @@ def get_repository_language(repo_name):
     else:
         return f"Error fetching repository info: {response.status_code}"
 #-------------------------------------------------------------
+def get_user_satr(response_events):
+    last_star = get_filtered_events(response_events,['WatchEvent'])
+    return last_star[0]['repo']['name']
+ 
+#-------------------------------------------------------------
 username = "tahamusvi"
 response_events = get_user_events(username)
 
-repo_languages = get_repo_languages(username)
-print(repo_languages)
+# repo_languages = get_repo_languages(username)
+# print(repo_languages)
+
+print(get_user_satr(response_events))
 
 # language_count = count_repos_by_language(repo_languages)
 # print(language_count)
@@ -208,4 +215,4 @@ print(repo_languages)
 
 # contributors_list = get_user_contributors(username,response_events)
 # print(contributors_list)
-#-------------------------------------------------------------
+# -------------------------------------------------------------
