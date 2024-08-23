@@ -33,45 +33,51 @@ def svg_generator(request,username):
 
     #----------------------------------------
     # section offline
-    repo_languages = {'Captcha-breaker': 'Python', 'Data-Structure-Coursera': 'C#', 'Emergency-pm': 'CSS', 'friendZone': 'Jupyter Notebook', 'images': 'Jupyter Notebook', 'MalwareDetector': 'Python', 'Petro-Lithology-Prediction': 'Jupyter Notebook', 'quera-solutions': 'Python', 'Stratego': 'Java', 'Sudoku_cpp': 'C++', 'Toos': 'Python', 'webShop': 'Python', 'Web_Security_tools': 'Python', 'words': 'Python', 'xv6-public': 'C'}
+    # latest_activity = {'type': 'PushEvent',
+    #  'repo_name': 'Seyedsahel/ProfilePizza',
+    #   'repo_url': 'https://api.github.com/repos/Seyedsahel/ProfilePizza',
+    #    'repo_lang': 'Python'}  
 
-    language_count = list(count_repos_by_language(repo_languages))
-
-
-    latest_activity = {'type': 'PushEvent', 'repo_name': 'Seyedsahel/ProfilePizza',
-      'repo_url': 'https://api.github.com/repos/Seyedsahel/ProfilePizza', 'repo_lang': 'Python'}
+    # co_name , working_on = latest_activity['repo_name'].split('/')
+    # working_on_with_link = f'<a href="https://github.com/{latest_activity["repo_name"]}">{working_on}</a>'
     
-    co_names = ['Sahel',
-        'Reza',
-        'Omid',
-        ]
-    #----------------------------------------
-    # repo_languages = get_repo_languages(username)
-    # print(repo_languages)
-    # print(f"--------------------")
 
+    # repo_languages = {'Captcha-breaker': 'Python', 'Data-Structure-Coursera': 'C#', 'Emergency-pm': 'CSS', 'friendZone': 'Jupyter Notebook', 'images': 'Jupyter Notebook', 'MalwareDetector': 'Python', 'Petro-Lithology-Prediction': 'Jupyter Notebook', 'quera-solutions': 'Python', 'Stratego': 'Java', 'Sudoku_cpp': 'C++', 'Toos': 'Python', 'webShop': 'Python', 'Web_Security_tools': 'Python', 'words': 'Python', 'xv6-public': 'C'}
 
     # language_count = list(count_repos_by_language(repo_languages))
-    # print(language_count)
-    # print(f"--------------------")
 
-    # latest_activity = get_latest_activity(username)
-    # print(latest_activity)
+    # co_names = ['Sahel',
+    #     'Reza',
+    #     'Omid',
+    #     ]
     #----------------------------------------
+    # 0
+    response_events = get_user_events(username)
 
+    # 1
+    latest_activity = get_latest_activity(response_events)
+    # print(latest_activity)
+
+    # 2
     co_name , working_on = latest_activity['repo_name'].split('/')
     working_on_with_link = f'<a href="https://github.com/{latest_activity["repo_name"]}">{working_on}</a>'
+    
+    # 3
+    repo_languages = get_repo_languages(username)
+    # print(repo_languages)
 
-    # co_names = get_user_contributors(username)
+    language_count = list(count_repos_by_language(repo_languages))
+    # print(language_count)
 
+    # 4
+    co_names = get_user_contributors(username,response_events)
+    #----------------------------------------
     texts = [
         f"🚀 Right now, I'm diving into {latest_activity['repo_lang']}.",
         f'🔧 I’m currently working on my {working_on} project.',
         f"📚  Ask me about {language_count[0]} and {language_count[1]}",
         f"{adieu(co_names)}",
     ]
-
-    
 
     # Calculate the height of the background box
     total_height = 20  # Initial padding
