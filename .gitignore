@@ -4,3 +4,4 @@ env
 db.sqlite3
 Ppizza.zip
 __pycache__
+.pytest_cache

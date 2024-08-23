@@ -3,7 +3,7 @@ from .models import Record
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
-from main import *
+from project import *
 
 def svg_generator(request,username):
     try:
@@ -22,56 +22,72 @@ def svg_generator(request,username):
     no_bg = request.GET.get('no_bg', 'false').lower() == 'true'
 
     # Get user-defined width and height or use default values
-    width = int(request.GET.get('width', 600))
+    width = int(request.GET.get('width', 480))
     height = int(request.GET.get('height', 400))
 
     # Determine font size based on SVG dimensions if not provided
-    font_size = int(request.GET.get('font_size', min(height // 15, width // 20)))  # Adjust based on both dimensions
+    font_size = int(request.GET.get('font_size', min(height // 25, width // 30)))  # Adjust based on both dimensions
 
     line_height = font_size * 1.5  # Space between lines
     max_width = width - 40  # Maximum width for text (considering padding)
 
     #----------------------------------------
     # section offline
-    repo_languages = {'Captcha-breaker': 'Python', 'Data-Structure-Coursera': 'C#', 'Emergency-pm': 'CSS', 'friendZone': 'Jupyter Notebook', 'images': 'Jupyter Notebook', 'MalwareDetector': 'Python', 'Petro-Lithology-Prediction': 'Jupyter Notebook', 'quera-solutions': 'Python', 'Stratego': 'Java', 'Sudoku_cpp': 'C++', 'Toos': 'Python', 'webShop': 'Python', 'Web_Security_tools': 'Python', 'words': 'Python', 'xv6-public': 'C'}
+    # latest_activity = {'type': 'PushEvent',
+    #  'repo_name': 'Seyedsahel/ProfilePizza',
+    #   'repo_url': 'https://api.github.com/repos/Seyedsahel/ProfilePizza',
+    #    'repo_lang': 'Python'}  
 
-    language_count = list(count_repos_by_language(repo_languages))
-
-
-    latest_activity = {'type': 'PushEvent', 'repo_name': 'Seyedsahel/ProfilePizza',
-      'repo_url': 'https://api.github.com/repos/Seyedsahel/ProfilePizza', 'repo_lang': 'Python'}
+    # co_name , working_on = latest_activity['repo_name'].split('/')
+    # working_on_with_link = f'<a href="https://github.com/{latest_activity["repo_name"]}">{working_on}</a>'
     
-    co_names = ['Sahel',
-        'Reza',
-        'Omid',
-        ]
-    #----------------------------------------
-    # repo_languages = get_repo_languages(username)
-    # print(repo_languages)
-    # print(f"--------------------")
 
+    # repo_languages = {'Captcha-breaker': 'Python', 'Data-Structure-Coursera': 'C#', 'Emergency-pm': 'CSS', 'friendZone': 'Jupyter Notebook', 'images': 'Jupyter Notebook', 'MalwareDetector': 'Python', 'Petro-Lithology-Prediction': 'Jupyter Notebook', 'quera-solutions': 'Python', 'Stratego': 'Java', 'Sudoku_cpp': 'C++', 'Toos': 'Python', 'webShop': 'Python', 'Web_Security_tools': 'Python', 'words': 'Python', 'xv6-public': 'C'}
 
     # language_count = list(count_repos_by_language(repo_languages))
-    # print(language_count)
-    # print(f"--------------------")
 
-    # latest_activity = get_latest_activity(username)
-    # print(latest_activity)
+    # co_names = ['Sahel',
+    #     'Reza',
+    #     'Omid',
+    #     ]
+
+    # last_star = "omidTarabavar/ICPC_Fundamental_Sharif"
+    # last_star_repo_name = last_star.split('/')[1]
+    # last_star_with_link = f'<a href="https://github.com/{last_star}">{last_star_repo_name}</a>'
     #----------------------------------------
+    # 0
+    response_events = get_user_events(username)
 
+    # 1
+    latest_activity = get_latest_activity(response_events)
+    
+
+    # 2
     co_name , working_on = latest_activity['repo_name'].split('/')
     working_on_with_link = f'<a href="https://github.com/{latest_activity["repo_name"]}">{working_on}</a>'
+    
+    # 3
+    repo_languages = get_repo_languages(username)
+    
 
-    # co_names = get_user_contributors(username)
+    language_count = list(count_repos_by_language(repo_languages))
+    
 
+    # 4
+    co_names = get_user_contributors(username,response_events)
+    
+    # 5
+    last_star = get_user_satr(response_events)
+    last_star_repo_name = last_star.split('/')[1]
+    last_star_with_link = f'<a href="https://github.com/{last_star}">{last_star_repo_name}</a>'
+    #----------------------------------------
     texts = [
         f"🚀 Right now, I'm diving into {latest_activity['repo_lang']}.",
         f'🔧 I’m currently working on my {working_on} project.',
         f"📚  Ask me about {language_count[0]} and {language_count[1]}",
         f"{adieu(co_names)}",
+        f"⭐ Just starred the amazing repository {last_star_repo_name} ! "
     ]
-
-    
 
     # Calculate the height of the background box
     total_height = 20  # Initial padding
@@ -104,9 +120,10 @@ def svg_generator(request,username):
     svg_content += '</svg>'
 
     svg_content = svg_content.replace(working_on,working_on_with_link)
+    svg_content = svg_content.replace(last_star_repo_name,last_star_with_link)
+
     for x in co_names:
-        
         svg_content = svg_content.replace(x,f'<a href="https://github.com/{x}">{x}</a>')
 
-    # print(svg_content)
+    print(svg_content)
     return HttpResponse(svg_content, content_type='image/svg+xml')
