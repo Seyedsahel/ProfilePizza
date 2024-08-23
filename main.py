@@ -78,7 +78,7 @@ def wrap_text(text, max_width, font_size):
     return lines
 #-------------------------------------------------------------
 def get_repo_languages(username):
-    print(token)
+    # print(token)
     repos_url = f"https://api.github.com/users/{username}/repos"
     headers = {'Authorization': f'token {token}'}
     
@@ -91,7 +91,6 @@ def get_repo_languages(username):
         
         for repo in repos:
             repo_name = repo['name']
-            print(repo_name)
             if repo_name == f"{username}" :
                 continue
             language = repo.get('language', 'No language specified')
