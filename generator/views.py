@@ -66,7 +66,7 @@ def svg_generator(request,username):
         response_events = get_user_events(username)
 
         # 1
-        latest_activity = get_latest_activity(response_events)
+        latest_activity = get_latest_activity(response_events,username)
         
 
         # 2
