@@ -28,6 +28,8 @@ def get_filtered_events(events,filters):
 #-------------------------------------------------------------
 def adieu(names):
     num_names = len(names)
+    if num_names == 0:
+        return "I recently collaborated with NoOne :("
     if num_names == 1:
         return (f"I recently collaborated with {names[0]}.")
     elif num_names == 2:

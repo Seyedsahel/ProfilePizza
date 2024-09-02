@@ -57,6 +57,7 @@ def svg_generator(request,username):
             'Omid',
             ]
 
+
         last_star = "omidTarabavar/ICPC_Fund"
         last_star_repo_name = last_star.split('/')[1]
         last_star_with_link = f'<a href="https://github.com/{last_star}">{last_star_repo_name}</a>'
@@ -81,7 +82,7 @@ def svg_generator(request,username):
         
 
         # 4
-        co_names = get_user_contributors(username,response_events)
+        co_names = get_user_contributors(username,response_events)             
         
         # 5
         last_star = get_user_satr(response_events)
@@ -96,6 +97,9 @@ def svg_generator(request,username):
         f"{adieu(co_names)}",
         f" Just starred the amazing repository {last_star_repo_name} ! "
     ]
+
+    
+        
 
     # Calculate the height of the background box
     total_height = 20  # Initial padding
@@ -135,6 +139,7 @@ def svg_generator(request,username):
     tspan = "<tspan x=\"25\" dy=\"yloc\"> TS_TEXT  </tspan>"
     count_line = 0
     for i,line in enumerate(texts):
+        # print(line)
         # svg_content += f'<text x="20" y="{margin + line_height * i}" class="text">{line}</text>\n'
         wrapped_lines = wrap_text(line, max_width, font_size)
         len_warp_line = len(wrapped_lines)
